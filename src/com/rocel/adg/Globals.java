@@ -12,6 +12,8 @@ public final class Globals {
 	public static final String TMP_FOLDER_IMAGES = "\\images";
 	public static final String EXPORT_ZIP_NAME = "drawables.zip";
 	public static String PATH_TO_TMP_FOLDER;
+	public static final String EXPORT_ZIP_EXTENSION = "zip";
+	public static final String EXPORT_ZIP_FILTER = "Zip File";
 	
 
 	//FOLDERS NAMES

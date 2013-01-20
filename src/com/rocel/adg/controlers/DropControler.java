@@ -219,6 +219,9 @@ public class DropControler implements IDropControler{
 
 	@Override
 	public void saveFile(String filePath) {
+		if(!filePath.endsWith("." + Globals.EXPORT_ZIP_EXTENSION)){
+			filePath += "." + Globals.EXPORT_ZIP_EXTENSION;
+		}
 		System.out.println("Going to save the file to : " + filePath);
 		System.out.println("From the file : " + Globals.PATH_TO_TMP_FOLDER + "\\" + Globals.EXPORT_ZIP_NAME);
 		String sCurrentLine = "";
@@ -231,8 +234,8 @@ public class DropControler implements IDropControler{
 			}
 			br.close();
 			bw.close();
-			File org = new File(Globals.PATH_TO_TMP_FOLDER + "\\" + Globals.EXPORT_ZIP_NAME);
-			org.delete();
+//			File org = new File(Globals.PATH_TO_TMP_FOLDER + "\\" + Globals.EXPORT_ZIP_NAME);
+//			org.delete();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

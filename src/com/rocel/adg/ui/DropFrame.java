@@ -12,6 +12,8 @@ import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.filechooser.FileFilter;
+import javax.swing.filechooser.FileNameExtensionFilter;
 
 import net.iharder.dnd.FileDrop;
 
@@ -82,6 +84,8 @@ public class DropFrame extends JFrame {
 	protected void saveFileDownloader() {
 		JFileChooser fileChooser = new JFileChooser(System.getProperty("user.dir"));
 		fileChooser.setSelectedFile(new File(Globals.EXPORT_ZIP_NAME));
+	    FileFilter filter = new FileNameExtensionFilter(Globals.EXPORT_ZIP_FILTER, Globals.EXPORT_ZIP_EXTENSION);
+		fileChooser.setFileFilter(filter);
 		int returnVal = fileChooser.showSaveDialog(null);
 		if (fileChooser.getSelectedFile() != null) {
 			File fileToSave = fileChooser.getSelectedFile();
