@@ -7,7 +7,11 @@ public final class Globals {
 	
 	//FILES & FOLDERS PATHS
 	public static final String PATH_IMG = "res\\DropImg.png";
+	public static final String PATH_IMG_DOWNLOADER = "res\\ic_android.png";
 	public static final String TMP_FOLDER = "com.rocel.adg";
+	public static final String TMP_FOLDER_IMAGES = "\\images";
+	public static final String EXPORT_ZIP_NAME = "drawables.zip";
+	public static String PATH_TO_TMP_FOLDER;
 	
 
 	//FOLDERS NAMES
@@ -24,9 +28,9 @@ public final class Globals {
 //	public static final float QUOTIENT_XHDPI = 2f;
 
 //	//XHDPI AS PATTERN
-	public static final float QUOTIENT_LDPI = 8/3;
-	public static final float QUOTIENT_MDPI = 2f;
-	public static final float QUOTIENT_HDPI = 1.33f;
+	public static final float QUOTIENT_LDPI = (float) (0.75/2);
+	public static final float QUOTIENT_MDPI = 1/2f;
+	public static final float QUOTIENT_HDPI = (float) (1.5/2);
 	public static final float QUOTIENT_XHDPI = 1f;
 	
 	//MAP OF DEFINITIONS

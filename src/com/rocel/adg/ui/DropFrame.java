@@ -8,6 +8,7 @@ import java.awt.HeadlessException;
 import java.io.File;
 
 import javax.swing.ImageIcon;
+import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -21,7 +22,7 @@ public class DropFrame extends JFrame {
 	private static final int DEFAULT_WIDTH = 600;
 	private static final int DEFAULT_HEIGHT = 600;
 	private static final int MIN_WIDTH = 210;
-	private static final int MIN_HEIGHT = 260;
+	private static final int MIN_HEIGHT = 300;
 	private static final String TITLE = "Android Drawable Generator";
 
 	private static final long serialVersionUID = 1L;
@@ -29,6 +30,10 @@ public class DropFrame extends JFrame {
 	private JPanel contentPanel;
 	private JLabel dropFileLabel;
 	
+//	private JPanel downloaderPanel;
+//	private JLabel downloadFileLabel;
+//	private static FileSystemView view = FileSystemView.getFileSystemView();      
+
 	public DropFrame(IDropControler controler) throws HeadlessException {
 		super();
 		this.controler = controler;
@@ -47,18 +52,60 @@ public class DropFrame extends JFrame {
 		contentPanel = new JPanel();
 		new FileDrop(contentPanel, new FileDrop.Listener() {
 			public void filesDropped(File[] files) {
-				controler.generateDrawables(files);
+				ResizableThread thread = new ResizableThread(files);
+				thread.start();
 			}
 		});
 		contentPanel.setBackground(new Color(238,237,237));
 		dropFileLabel = new JLabel(new ImageIcon(Globals.PATH_IMG));
 		contentPanel.setLayout(new BorderLayout());
 		contentPanel.add(dropFileLabel, BorderLayout.CENTER);
+//		downloaderPanel = new JPanel();
+//		if(view != null){
+//			File file;
+//			try {
+//				file = File.createTempFile("icon", ".zip");
+//				sun.awt.shell.ShellFolder shellFolder = sun.awt.shell.ShellFolder.getShellFolder(file);      
+//				downloadFileLabel = new JLabel(new ImageIcon(shellFolder.getIcon(true)));
+//			} catch (IOException e) {
+//				e.printStackTrace();
+//			}  
+//		} else {
+//			downloadFileLabel = new JLabel(new ImageIcon(Globals.PATH_IMG_DOWNLOADER));
+//		}
+//		downloaderPanel.add(downloadFileLabel);
+//		downloadFileLabel.setVisible(false);
+//		contentPanel.add(downloaderPanel, BorderLayout.SOUTH);
 		return contentPanel;
+	}
+
+	protected void saveFileDownloader() {
+		JFileChooser fileChooser = new JFileChooser(System.getProperty("user.dir"));
+		fileChooser.setSelectedFile(new File(Globals.EXPORT_ZIP_NAME));
+		int returnVal = fileChooser.showSaveDialog(null);
+		if (fileChooser.getSelectedFile() != null) {
+			File fileToSave = fileChooser.getSelectedFile();
+			controler.saveFile(fileToSave.getAbsolutePath());
+		}
+//		downloadFileLabel.setVisible(true);
 	}
 
 	public void display() {
 		this.setVisible(true);
 	}
 
+	class ResizableThread extends Thread{
+		File[] files;
+		
+		public ResizableThread(File[] files){
+			this.files = files;
+		}
+		
+		@Override
+		public void run() {
+			if (controler.generateDrawables(files)){
+				saveFileDownloader();
+			}
+		}
+	}
 }
