@@ -2,15 +2,10 @@ package com.rocel.adg.controlers;
 
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
 import java.io.Closeable;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
-import java.io.FileReader;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -37,43 +32,53 @@ public class DropControler implements IDropControler{
 	public boolean generateDrawables(File[] files) {
 		List<File> filesList = getDropedFiles(files);
 		File tmpFolder ;
-		if (System.getProperty("java.io.tmpdir") == null || System.getProperty("java.io.tmpdir").isEmpty()){
-			tmpFolder = new File(Globals.TMP_FOLDER + Globals.TMP_FOLDER_IMAGES);
-			Globals.PATH_TO_TMP_FOLDER = Globals.TMP_FOLDER;
-		} else {
-			tmpFolder = new File(System.getProperty("java.io.tmpdir")+ ""+ Globals.TMP_FOLDER + Globals.TMP_FOLDER_IMAGES);
-			Globals.PATH_TO_TMP_FOLDER = System.getProperty("java.io.tmpdir")+ ""+ Globals.TMP_FOLDER;
-		}
-
-		//clear the folder
-		cleanFolder(tmpFolder);
-
-		try {
-			for (Iterator<String> i = Globals.MAP_DEFINITIONS.keySet().iterator() ; i.hasNext() ; ) {
-				String key = i.next();
-				forceMkdir(new File(tmpFolder + "\\" + key));
-				for(File file : filesList){
-					//					BufferedImage resizedImage = resizeImage(file, Globals.MAP_DEFINITIONS.get(key));
-					BufferedImage originalImage = ImageIO.read(file);
-					BufferedImage resizedImage = Scalr.resize(originalImage,
-							Scalr.Method.SPEED,
-							Scalr.Mode.FIT_TO_WIDTH,
-							(int) (originalImage.getWidth() * Globals.MAP_DEFINITIONS.get(key)),
-							(int) (originalImage.getHeight() * Globals.MAP_DEFINITIONS.get(key)), Scalr.OP_ANTIALIAS);
-					ImageIO.write(resizedImage, getFileType(file), new File(tmpFolder + "\\" + key + "\\" + file.getName()));
-					System.out.println("Created the file :" + tmpFolder + "\\" + key + "\\" + file.getName());
-				}
+		try{
+			if (System.getProperty("java.io.tmpdir") == null || System.getProperty("java.io.tmpdir").isEmpty()){
+				tmpFolder = new File(Globals.TMP_FOLDER + Globals.TMP_FOLDER_IMAGES);
+				Globals.PATH_TO_TMP_FOLDER = Globals.TMP_FOLDER;
+			} else {
+				tmpFolder = new File(System.getProperty("java.io.tmpdir")+ ""+ Globals.TMP_FOLDER + Globals.TMP_FOLDER_IMAGES);
+				Globals.PATH_TO_TMP_FOLDER = System.getProperty("java.io.tmpdir")+ ""+ Globals.TMP_FOLDER;
 			}
-		} catch (IOException e) {
-			e.printStackTrace();
-		} 
 
-		try {
-			zip(tmpFolder,  new File(tmpFolder.getParent() + "\\" + Globals.EXPORT_ZIP_NAME));
-		} catch (IOException e) {
+			if(!tmpFolder.exists()){
+				tmpFolder.mkdirs();
+			}
+
+			//clear the folder
+			cleanFolder(tmpFolder);
+
+			try {
+				for (Iterator<String> i = Globals.MAP_DEFINITIONS.keySet().iterator() ; i.hasNext() ; ) {
+					String key = i.next();
+					File imgFolder = new File(tmpFolder + File.separator + key) ;
+					if(!imgFolder.exists()){
+						imgFolder.mkdirs();
+					}
+					for(File file : filesList){
+						//					BufferedImage resizedImage = resizeImage(file, Globals.MAP_DEFINITIONS.get(key));
+						BufferedImage originalImage = ImageIO.read(file);
+						BufferedImage resizedImage = Scalr.resize(originalImage,
+								Scalr.Method.SPEED,
+								Scalr.Mode.FIT_TO_WIDTH,
+								(int) (originalImage.getWidth() * Globals.MAP_DEFINITIONS.get(key)),
+								(int) (originalImage.getHeight() * Globals.MAP_DEFINITIONS.get(key)), Scalr.OP_ANTIALIAS);
+						ImageIO.write(resizedImage, getFileType(file), new File(imgFolder + File.separator + file.getName()));
+						System.out.println("Created the file :" + imgFolder + File.separator + file.getName());
+					}
+				}
+			} catch (IOException e) {
+				e.printStackTrace();
+			} 
+
+			try {
+				zip(tmpFolder,  new File(tmpFolder.getParent() + File.separator + Globals.EXPORT_ZIP_NAME));
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
-
 		return true;
 	}
 
@@ -223,19 +228,10 @@ public class DropControler implements IDropControler{
 			filePath += "." + Globals.EXPORT_ZIP_EXTENSION;
 		}
 		System.out.println("Going to save the file to : " + filePath);
-		System.out.println("From the file : " + Globals.PATH_TO_TMP_FOLDER + "\\" + Globals.EXPORT_ZIP_NAME);
-		String sCurrentLine = "";
+		System.out.println("From the file : " + Globals.PATH_TO_TMP_FOLDER + File.separator + Globals.EXPORT_ZIP_NAME);
 		try {
-			BufferedReader br = new BufferedReader(new FileReader(Globals.PATH_TO_TMP_FOLDER + "\\" + Globals.EXPORT_ZIP_NAME));
-			BufferedWriter bw = new BufferedWriter(new FileWriter(filePath));
-			while ((sCurrentLine = br.readLine()) != null) {
-				bw.write(sCurrentLine);
-				bw.newLine();
-			}
-			br.close();
-			bw.close();
-//			File org = new File(Globals.PATH_TO_TMP_FOLDER + "\\" + Globals.EXPORT_ZIP_NAME);
-//			org.delete();
+			File from = new File(Globals.PATH_TO_TMP_FOLDER + File.separator + Globals.EXPORT_ZIP_NAME);
+			from.renameTo(new File(filePath));
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

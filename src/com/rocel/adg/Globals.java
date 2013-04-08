@@ -1,15 +1,16 @@
 package com.rocel.adg;
 
+import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
 
 public final class Globals {
 	
 	//FILES & FOLDERS PATHS
-	public static final String PATH_IMG = "res\\DropImg.png";
-	public static final String PATH_IMG_DOWNLOADER = "res\\ic_android.png";
-	public static final String TMP_FOLDER = "com.rocel.adg";
-	public static final String TMP_FOLDER_IMAGES = "\\images";
+	public static final String PATH_IMG = File.separator+"res"+File.separator+"DropImg.png";
+	public static final String PATH_IMG_DOWNLOADER = File.separator+"res"+File.separator+"ic_android.png";
+	public static final String TMP_FOLDER = File.separator+"com.rocel.adg";
+	public static final String TMP_FOLDER_IMAGES = File.separator+"images";
 	public static final String EXPORT_ZIP_NAME = "drawables.zip";
 	public static String PATH_TO_TMP_FOLDER;
 	public static final String EXPORT_ZIP_EXTENSION = "zip";

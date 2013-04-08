@@ -5,7 +5,10 @@ import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.HeadlessException;
+import java.awt.Image;
+import java.awt.Toolkit;
 import java.io.File;
+import java.net.URL;
 
 import javax.swing.ImageIcon;
 import javax.swing.JFileChooser;
@@ -59,7 +62,10 @@ public class DropFrame extends JFrame {
 			}
 		});
 		contentPanel.setBackground(new Color(238,237,237));
-		dropFileLabel = new JLabel(new ImageIcon(Globals.PATH_IMG));
+//		dropFileLabel = new JLabel(new ImageIcon(Globals.PATH_IMG));
+		URL imageurl = getClass().getResource(Globals.PATH_IMG);//assuming your package name is images 
+        Image img = Toolkit.getDefaultToolkit().getImage(imageurl);
+		dropFileLabel = new JLabel(new ImageIcon(img));
 		contentPanel.setLayout(new BorderLayout());
 		contentPanel.add(dropFileLabel, BorderLayout.CENTER);
 //		downloaderPanel = new JPanel();
