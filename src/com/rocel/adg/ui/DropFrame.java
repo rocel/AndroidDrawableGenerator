@@ -15,6 +15,7 @@ import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.border.EmptyBorder;
 import javax.swing.filechooser.FileFilter;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
@@ -24,10 +25,8 @@ import com.rocel.adg.Globals;
 import com.rocel.adg.controlers.IDropControler;
 
 public class DropFrame extends JFrame {
-	private static final int DEFAULT_WIDTH = 600;
-	private static final int DEFAULT_HEIGHT = 600;
-	private static final int MIN_WIDTH = 210;
-	private static final int MIN_HEIGHT = 300;
+	private static final int WINDOW_WIDTH = 255;//600;
+	private static final int WINDOW_HEIGHT = 300;//600;
 	private static final String TITLE = "Android Drawable Generator";
 
 	private static final long serialVersionUID = 1L;
@@ -35,10 +34,12 @@ public class DropFrame extends JFrame {
 	private JPanel contentPanel;
 	private JLabel dropFileLabel;
 	
-//	private JPanel downloaderPanel;
-//	private JLabel downloadFileLabel;
-//	private static FileSystemView view = FileSystemView.getFileSystemView();      
-
+	private URL imageurl;
+	private Image imgDrop;
+	private Image imgWaiting;
+	private Image imgSave;
+	private JLabel subtitleLabel;
+	
 	public DropFrame(IDropControler controler) throws HeadlessException {
 		super();
 		this.controler = controler;
@@ -48,45 +49,55 @@ public class DropFrame extends JFrame {
 	private void createUI() {
 		this.setTitle(TITLE);
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		this.setSize(WINDOW_WIDTH, WINDOW_HEIGHT);
+		this.setMinimumSize(new Dimension(WINDOW_WIDTH, WINDOW_HEIGHT));
+		this.setResizable(false);
+		//center window in the middle the screen because why the fuck it gets somewhere in the top left?!
+		this.setLocationRelativeTo(null);
+		URL imageurl = getClass().getResource(Globals.PATH_ICON_IMG);
+        Image appIcon = Toolkit.getDefaultToolkit().getImage(imageurl);
+		this.setIconImage(appIcon);
 		this.getContentPane().add(getCenterContent());
-		this.setSize(DEFAULT_WIDTH, DEFAULT_HEIGHT);
-		this.setMinimumSize(new Dimension(MIN_WIDTH, MIN_HEIGHT));
 	}
 
 	private Component getCenterContent() {
-		contentPanel = new JPanel();
+		contentPanel = new JPanel(new BorderLayout());
+		contentPanel.setBackground(new Color(238,238,238));
+		
+		imageurl = getClass().getResource(Globals.PATH_DROP_IMG);
+        imgDrop = Toolkit.getDefaultToolkit().getImage(imageurl);
+
+		imageurl = getClass().getResource(Globals.PATH_WAITING_IMG);
+        imgWaiting = Toolkit.getDefaultToolkit().getImage(imageurl);
+
+		imageurl = getClass().getResource(Globals.PATH_SAVE_IMG);
+        imgSave = Toolkit.getDefaultToolkit().getImage(imageurl);
+        
+        dropFileLabel = new JLabel("", JLabel.CENTER);
+		dropFileLabel.setIcon(new ImageIcon(imgDrop));
+		dropFileLabel.setBackground(Color.RED);
+		
+		contentPanel.add(dropFileLabel,BorderLayout.CENTER);
+		
+		subtitleLabel = new JLabel("Drop your XHDPI file/folder here", JLabel.CENTER);
+		subtitleLabel.setBorder( new EmptyBorder( 0, 6, 16, 6) );
+		
+		contentPanel.add(subtitleLabel,BorderLayout.SOUTH);
+		
 		new FileDrop(contentPanel, new FileDrop.Listener() {
 			public void filesDropped(File[] files) {
+				displayWaiting();
 				ResizableThread thread = new ResizableThread(files);
 				thread.start();
 			}
 		});
-		contentPanel.setBackground(new Color(238,237,237));
-//		dropFileLabel = new JLabel(new ImageIcon(Globals.PATH_IMG));
-		URL imageurl = getClass().getResource(Globals.PATH_IMG);//assuming your package name is images 
-        Image img = Toolkit.getDefaultToolkit().getImage(imageurl);
-		dropFileLabel = new JLabel(new ImageIcon(img));
-		contentPanel.setLayout(new BorderLayout());
-		contentPanel.add(dropFileLabel, BorderLayout.CENTER);
-//		downloaderPanel = new JPanel();
-//		if(view != null){
-//			File file;
-//			try {
-//				file = File.createTempFile("icon", ".zip");
-//				sun.awt.shell.ShellFolder shellFolder = sun.awt.shell.ShellFolder.getShellFolder(file);      
-//				downloadFileLabel = new JLabel(new ImageIcon(shellFolder.getIcon(true)));
-//			} catch (IOException e) {
-//				e.printStackTrace();
-//			}  
-//		} else {
-//			downloadFileLabel = new JLabel(new ImageIcon(Globals.PATH_IMG_DOWNLOADER));
-//		}
-//		downloaderPanel.add(downloadFileLabel);
-//		downloadFileLabel.setVisible(false);
-//		contentPanel.add(downloaderPanel, BorderLayout.SOUTH);
 		return contentPanel;
 	}
-
+	
+	private void displayWaiting(){
+		dropFileLabel.setIcon(new ImageIcon(imgWaiting));
+	}
+	
 	protected void saveFileDownloader() {
 		JFileChooser fileChooser = new JFileChooser(System.getProperty("user.dir"));
 		fileChooser.setSelectedFile(new File(Globals.EXPORT_ZIP_NAME));
@@ -97,9 +108,12 @@ public class DropFrame extends JFrame {
 			File fileToSave = fileChooser.getSelectedFile();
 			controler.saveFile(fileToSave.getAbsolutePath());
 		}
-//		downloadFileLabel.setVisible(true);
 	}
 
+	private void displaySaveUI() {
+		dropFileLabel.setIcon(new ImageIcon(imgDrop));
+	}
+	
 	public void display() {
 		this.setVisible(true);
 	}
@@ -113,9 +127,11 @@ public class DropFrame extends JFrame {
 		
 		@Override
 		public void run() {
-			if (controler.generateDrawables(files)){
+			if (controler.generateDrawables(files)) {
 				saveFileDownloader();
+				displaySaveUI();
 			}
 		}
+
 	}
 }

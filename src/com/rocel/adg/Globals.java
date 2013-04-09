@@ -7,8 +7,10 @@ import java.util.Map;
 public final class Globals {
 	
 	//FILES & FOLDERS PATHS
-	public static final String PATH_IMG = File.separator+"res"+File.separator+"DropImg.png";
-	public static final String PATH_IMG_DOWNLOADER = File.separator+"res"+File.separator+"ic_android.png";
+	public static final String PATH_DROP_IMG = File.separator+"res"+File.separator+"download-6-256.png";
+	public static final String PATH_WAITING_IMG = File.separator+"res"+File.separator+"loader.gif";
+	public static final String PATH_SAVE_IMG = File.separator+"res"+File.separator+"upload-9-64.png";
+	public static final String PATH_ICON_IMG = File.separator+"res"+File.separator+"ic_android.png";
 	public static final String TMP_FOLDER = File.separator+"com.rocel.adg";
 	public static final String TMP_FOLDER_IMAGES = File.separator+"images";
 	public static final String EXPORT_ZIP_NAME = "drawables.zip";

@@ -59,7 +59,7 @@ public class DropControler implements IDropControler{
 						//					BufferedImage resizedImage = resizeImage(file, Globals.MAP_DEFINITIONS.get(key));
 						BufferedImage originalImage = ImageIO.read(file);
 						BufferedImage resizedImage = Scalr.resize(originalImage,
-								Scalr.Method.SPEED,
+								Scalr.Method.QUALITY,
 								Scalr.Mode.FIT_TO_WIDTH,
 								(int) (originalImage.getWidth() * Globals.MAP_DEFINITIONS.get(key)),
 								(int) (originalImage.getHeight() * Globals.MAP_DEFINITIONS.get(key)), Scalr.OP_ANTIALIAS);

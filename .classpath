@@ -17,5 +17,6 @@
 		</attributes>
 	</classpathentry>
 	<classpathentry kind="lib" path="libs/filedrop.jar"/>
+	<classpathentry kind="lib" path="libs/imgscalr-lib-4.2.jar"/>
 	<classpathentry kind="output" path="target/classes"/>
 </classpath>
