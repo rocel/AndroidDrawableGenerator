@@ -52,9 +52,11 @@ public class DropFrame extends JFrame {
 		this.setSize(WINDOW_WIDTH, WINDOW_HEIGHT);
 		this.setMinimumSize(new Dimension(WINDOW_WIDTH, WINDOW_HEIGHT));
 		this.setResizable(false);
-		//center window in the middle the screen because why the fuck it gets somewhere in the top left?!
+		//center window in the middle the screen because why the fuck it gets *somewhere* in the top left?!
 		this.setLocationRelativeTo(null);
 		URL imageurl = getClass().getResource(Globals.PATH_ICON_IMG);
+		System.out.println("imageurl:"+ imageurl);
+		System.out.println("icon path:"+ Globals.PATH_ICON_IMG);
         Image appIcon = Toolkit.getDefaultToolkit().getImage(imageurl);
 		this.setIconImage(appIcon);
 		this.getContentPane().add(getCenterContent());

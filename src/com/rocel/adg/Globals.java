@@ -1,18 +1,18 @@
 package com.rocel.adg;
 
-import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
 
 public final class Globals {
 	
+	private static final String RESSOURCES_FOLDER = "/"+"res";
 	//FILES & FOLDERS PATHS
-	public static final String PATH_DROP_IMG = File.separator+"res"+File.separator+"download-6-256.png";
-	public static final String PATH_WAITING_IMG = File.separator+"res"+File.separator+"loader.gif";
-	public static final String PATH_SAVE_IMG = File.separator+"res"+File.separator+"upload-9-64.png";
-	public static final String PATH_ICON_IMG = File.separator+"res"+File.separator+"ic_android.png";
-	public static final String TMP_FOLDER = File.separator+"com.rocel.adg";
-	public static final String TMP_FOLDER_IMAGES = File.separator+"images";
+	public static final String PATH_DROP_IMG = RESSOURCES_FOLDER + "/" + "download-6-256.png";
+	public static final String PATH_WAITING_IMG = RESSOURCES_FOLDER + "/" + "loader.gif";
+	public static final String PATH_SAVE_IMG = RESSOURCES_FOLDER + "/" + "upload-9-64.png";
+	public static final String PATH_ICON_IMG = RESSOURCES_FOLDER + "/" + "ic_android.png";
+	public static final String TMP_FOLDER = "/"+"com.rocel.adg";
+	public static final String TMP_FOLDER_IMAGES = "/"+"images";
 	public static final String EXPORT_ZIP_NAME = "drawables.zip";
 	public static String PATH_TO_TMP_FOLDER;
 	public static final String EXPORT_ZIP_EXTENSION = "zip";
